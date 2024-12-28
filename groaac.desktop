@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Get Rid of AAC
+Comment=Extract MP3s from MP4 files
+Path=/opt/groaac/
+Exec=python3 /opt/groaac/main.py %u
+Terminal=false
+Icon=/opt/groaac/groaac.png
+StartupNotify=true
+StartupWMClass=groaac
+Categories=Utility;
