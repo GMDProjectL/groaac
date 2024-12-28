@@ -1,5 +1,6 @@
 import subprocess
 import os
+from typing import List
 
 
 def get_audio_track_count(input_file):
@@ -34,12 +35,14 @@ def extract_audio_track(input_file, track_number, output_file):
     subprocess.run(command)
 
 
-def extract_tracks_from_video(input_file, output_directory):
+def extract_tracks_from_video(input_file, output_directory) -> List[str]:
     input_file_name: str = os.path.basename(input_file)
     input_file_name = input_file_name.split('.')[0]
     
     audio_track_count = get_audio_track_count(input_file)
     print(f"Number of audio tracks: {audio_track_count}")
+
+    output_files = []
 
     for track_number in range(audio_track_count):
 
@@ -48,3 +51,7 @@ def extract_tracks_from_video(input_file, output_directory):
 
         extract_audio_track(input_file, track_number, output_file)
         print(f"Track {track_number} extracted successfully.")
+
+        output_files.append(output_file)
+    
+    return output_files

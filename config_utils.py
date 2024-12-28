@@ -7,7 +7,7 @@ defaultDirectory = None
 with open(os.getenv("HOME") + "/.config/user-dirs.dirs") as f:
     for line in f:
         if "XDG_VIDEOS_DIR" in line:
-            defaultDirectory = line.split("=")[1].strip().replace("$HOME", os.getenv("HOME"))
+            defaultDirectory = line.split("=")[1].strip().replace("$HOME", os.getenv("HOME")).replace('"', '')
 
 
 config_directory = os.getenv("HOME") + "/.config/groaac"

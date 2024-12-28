@@ -3,6 +3,7 @@ import dbus
 import dbus.bus
 import wx
 import os
+from typing import List
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -12,7 +13,7 @@ import ffmpeg_utils
 
 config = config_utils.load_config()
 
-video_directory = config["directory"]
+video_directory = config["directory"].replace('"', '')
 
 
 print("Initial video directory: " + video_directory)
@@ -22,19 +23,24 @@ old_text: str = ""
 status_button: wx.Button = None
 
 
-def done_extracting(video_directory: str):
+def wrap_filename(filename: str):
+    return "file://" + filename
+
+
+def done_extracting(items: List[str]):
     global status_button, old_text
     status_button.SetLabelText(old_text)
 
     bus = dbus.SessionBus()
     proxy = bus.get_object('org.freedesktop.FileManager1', '/org/freedesktop/FileManager1')
     interface = dbus.Interface(proxy, dbus_interface='org.freedesktop.FileManager1')
-    interface.ShowFolders(["file://" + video_directory], "")
+
+    interface.ShowItems([wrap_filename(items[0])], "")
 
 
 def extract_in_background(filename, output_directory):
-    ffmpeg_utils.extract_tracks_from_video(filename, output_directory)
-    wx.CallAfter(lambda: done_extracting(output_directory))
+    items = ffmpeg_utils.extract_tracks_from_video(filename, output_directory)
+    wx.CallAfter(lambda: done_extracting(items))
 
 
 class DropTarget(wx.FileDropTarget):
@@ -90,7 +96,7 @@ class MyFrame(wx.Frame):
     def on_button(self, event):
         global video_directory
 
-        tmp_dir = wx.DirSelector()
+        tmp_dir = wx.DirSelector(default_path=video_directory)
         
         if tmp_dir == "":
             print("No directory selected")

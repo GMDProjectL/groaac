@@ -16,9 +16,9 @@ source=("config_utils.py" "ffmpeg_utils.py" "main.py" "groaac.png" "groaac.deskt
 
 package() {
   mkdir -p "$pkgdir/opt/groaac"
-  cp -r "$srcdir/config_utils.py" "$pkgdir/opt/groaac"
-  cp -r "$srcdir/ffmpeg_utils.py" "$pkgdir/opt/groaac"
-  cp -r "$srcdir/main.py" "$pkgdir/opt/groaac"
-  cp -r "$srcdir/groaac.png" "$pkgdir/opt/groaac"
+  install -Dm7777 "$srcdir/config_utils.py" "$pkgdir/opt/groaac"
+  install -Dm7777 "$srcdir/ffmpeg_utils.py" "$pkgdir/opt/groaac"
+  install -Dm7777 "$srcdir/main.py" "$pkgdir/opt/groaac"
+  install -Dm7777 "$srcdir/groaac.png" "$pkgdir/opt/groaac"
   install -Dm0644 $srcdir/groaac.desktop -t "${pkgdir}/usr/share/applications"
 }
